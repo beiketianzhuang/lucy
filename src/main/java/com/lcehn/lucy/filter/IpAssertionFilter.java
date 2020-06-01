@@ -26,7 +26,7 @@ public class IpAssertionFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         try {
-            frequencyValidator.valid(servletRequest);
+//            frequencyValidator.valid(servletRequest);
         } catch (Exception e) {
             HttpServletResponse response = (HttpServletResponse) servletResponse;
             response.getWriter().write("您搜索的过于频繁，请稍后再试吧");

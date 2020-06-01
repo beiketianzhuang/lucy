@@ -22,6 +22,6 @@ public class QueryFrequencyValidator implements Validator<ServletRequest> {
     }
 
     public void validIp(String ip) {
-
+//        throw new RuntimeException();
     }
 }
