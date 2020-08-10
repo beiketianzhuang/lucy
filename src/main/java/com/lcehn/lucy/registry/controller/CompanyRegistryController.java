@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 import static com.lcehn.lucy.registry.model.CompanyData.applyCompanyData;
+import static com.lcehn.lucy.registry.model.CompanyStep.applyCompanySteps;
 
 @RestController
 public class CompanyRegistryController {
@@ -34,7 +35,8 @@ public class CompanyRegistryController {
 
     @GetMapping(value = "/companies/registry/steps")
     public List<CompanyStep> listCompanySteps() {
-        return companyRegistryService.listCompanySteps();
+        List<CompanyStep> companySteps = companyRegistryService.listCompanySteps();
+        return applyCompanySteps(companySteps);
     }
 
     @GetMapping(value = "/companies/registry/questions")

@@ -1,4 +1,4 @@
-package com.lcehn.lucy.common.config;
+package com.lcehn.lucy.common;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

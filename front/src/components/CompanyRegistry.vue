@@ -4,35 +4,31 @@
       <div style="width: 50%">
         <el-form :model="registryCompanyForm" :rules="rules" ref="registryCompanyForm" label-width="100px"
                  class="demo-registryCompanyForm">
-          <el-form-item label="地区" prop="companyTypes">
-            <el-select v-model="registryCompanyForm.address" placeholder="请选择工商注册类型">
+          <el-form-item label="地区" prop="address">
+            <el-select v-model="registryCompanyForm.address" placeholder="请选择工商注册地区">
               <el-option label="上海" value="sh"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="注册类型" prop="companyTypes">
-            <el-select v-model="registryCompanyForm.companyType" placeholder="请选择工商注册类型">
-              <el-option label="个体户" value="shanghai"></el-option>
-              <el-option label="个人独资" value="beijing"></el-option>
-              <el-option label="有限责任公司" value="beijing"></el-option>
-              <el-option label="股份有限公司" value="beijing"></el-option>
-              <el-option label="分公司" value="beijing"></el-option>
+          <el-form-item label="注册类型" prop="businessType">
+            <el-select v-model="registryCompanyForm.businessType" placeholder="请选择工商注册类型">
+              <div v-for="businessType in businessTypes" :key="businessType.id">
+                <el-option :label="businessType.name" :value="businessType.value"></el-option>
+              </div>
             </el-select>
           </el-form-item>
-          <el-form-item label="行业类型" prop="region" style="width: 100%">
-            <el-select v-model="registryCompanyForm.region" placeholder="请选择工商注册类型">
-              <el-option label="商贸贸易" value="shanghai"></el-option>
-              <el-option label="科技类" value="beijing"></el-option>
-              <el-option label="文化传媒" value="beijing"></el-option>
-              <el-option label="咨询管理" value="beijing"></el-option>
-              <el-option label="经济金融" value="beijing"></el-option>
+          <el-form-item label="行业类型" prop="industry" style="width: 100%">
+            <el-select v-model="registryCompanyForm.industry" placeholder="请选择工商注册类型">
+              <div v-for="industry in industries" :key="industry.id">
+                <el-option :label="industry.name" :value="industry.value"></el-option>
+              </div>
             </el-select>
           </el-form-item>
 
           <el-form-item label="手机号" prop="region" style="width: 100%">
-            <el-input v-model="registryCompanyForm.region"></el-input>
+            <el-input v-model="registryCompanyForm.phone"></el-input>
           </el-form-item>
-          <el-form-item label="服务价格" prop="region" style="width: 100%">
-            <span style="color: #ff7800;font-size:30px;font-weight:bold;line-height:40px">¥1000</span>
+          <el-form-item label="服务价格" style="width: 100%">
+            <span style="color: #ff7800;font-size:30px;font-weight:bold;line-height:40px">¥{{price}}</span>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="submitForm('registryCompanyForm')">立即申请</el-button>
@@ -85,11 +81,15 @@
 
 <script>
     import axios from 'axios'
+
     export default {
         name: "CompanyRegistry",
         data() {
             return {
+                price: 900,
                 activeNames: ['1', '2', '3', '4', '5'],
+                businessTypes: [],
+                industries: [],
                 companyData: [
                     {number: "01", desc: "公司名称（地区+名字+行业+类型），例：上海企助网络信息科技有限公司"},
                     {number: "02", desc: "公司名称（地区+名字+行业+类型），例：上海企助网络信息科技有限公司"},
@@ -118,25 +118,19 @@
                     }
                 ],
                 registryCompanyForm: {
-                    name: '',
-                    region: '',
-                    date1: '',
-                    date2: '',
-                    delivery: false,
-                    type: [],
-                    resource: '',
-                    desc: ''
+                    businessType: [],
+                    industry: []
                 },
                 rules: {
                     name: [
                         {required: true, message: '请输入活动名称', trigger: 'blur'},
                         {min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur'}
                     ],
-                    region: [
-                        {required: true, message: '请选择活动区域', trigger: 'change'}
+                    industry: [
+                        {required: true, message: '请选择行业类型', trigger: 'change'}
                     ],
-                    date1: [
-                        {type: 'date', required: true, message: '请选择日期', trigger: 'change'}
+                    businessType: [
+                        {required: true, message: '请选择注册类型', trigger: 'change'}
                     ],
                     date2: [
                         {type: 'date', required: true, message: '请选择时间', trigger: 'change'}
@@ -172,7 +166,7 @@
 
             axios.get("/companies/registry/data")
                 .then(resp => {
-                   this.companyData = resp.data;
+                    this.companyData = resp.data;
                 })
                 .catch(e => {
 
@@ -189,6 +183,21 @@
             axios.get("/companies/registry/questions")
                 .then(resp => {
                     this.companyQuestions = resp.data;
+                })
+                .catch(e => {
+
+                })
+
+            axios.get("companies/commons/business-types")
+                .then(resp => {
+                    this.businessTypes = resp.data;
+                })
+                .catch(e => {
+
+                })
+            axios.get("companies/commons/industries")
+                .then(resp => {
+                    this.industries = resp.data;
                 })
                 .catch(e => {
 
